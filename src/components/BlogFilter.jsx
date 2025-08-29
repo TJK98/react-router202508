@@ -19,16 +19,36 @@ const BlogFilter = () => {
         });
     }
 
+    const handleSortChange = e => {
+        setSearchParams(prev => {
+            prev.set('sort', e.target.value);
+            return prev;
+        });
+    };
+
+    const handleSearch = e => {
+        setSearchParams(prev => {
+            prev.set('search', e.target.value);
+            return prev;
+        });
+    };
+
     return (
         <div className={styles.filter}>
-            <select onChange={handelCategotyChange} value={searchParams.get(`category`) || `all`}>
+            <select
+                onChange={handelCategotyChange}
+                value={searchParams.get(`category`) || `all`}
+            >
                 {/*직접 작성하는 게 아닌 카테고리에서 직접 꺼내와서 옵션을 걸어줘야 한다.*/}
                 {/*<option>리액트</option>*/}
                 {/*<option>노드JS</option>*/}
                 {categories.map(ct => <option key={ct.id} value={ct.id}>{ct.name}</option>)}
             </select>
 
-            <select>
+            <select
+                onChange={handleSortChange}
+                value={searchParams.get('sort') || 'latest'}
+            >
                 <option value='latest'>최신순</option>
                 <option value='oldest'>오래된순</option>
             </select>
@@ -36,6 +56,8 @@ const BlogFilter = () => {
             <input
                 type='text'
                 placeholder='검색어를 입력하세요'
+                onChange={handleSearch}
+                value={searchParams.get('search') || ''}
             />
         </div>
     );

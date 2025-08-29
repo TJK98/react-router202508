@@ -2,6 +2,7 @@ import React from 'react';
 import {useParams} from "react-router-dom";
 import {posts} from "../dummy-data/dummy-post.js";
 import styles from './BlogPostDetailPage.module.scss';
+import BlogSideBar from "../components/BlogSideBar.jsx";
 
 const BlogPostDetailPage = () => {
 
@@ -27,6 +28,7 @@ const BlogPostDetailPage = () => {
         //     {postId}번 블로그 상세 조회 페이지 입니다.
         // </h2>
         <article className={styles.post}>
+            {/*<BlogSideBar />*/}
             <h1>{post.title}</h1>
             <div className={styles.meta}>
                 <span>{post.date}</span>

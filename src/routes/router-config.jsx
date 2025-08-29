@@ -7,6 +7,7 @@ import AboutPage from '../pages/AboutPage.jsx';
 import RootLayout from "../layouts/RootLayout.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
 import BlogPostDetailPage from "../pages/BlogPostDetailPage.jsx";
+import BlogLayout from "../layouts/BlogLayout.jsx";
 
 
 // 라우터 설정을  props로 전달
@@ -36,14 +37,29 @@ export const router = createBrowserRouter([
                 index: true, // path가 빈문자열이면 이렇게 대체할 수도 있다.
                 element: <IndexPage />
             },
+            // 중첩 레이아웃
             {
-                path: 'blog',
-                element: <BlogPage />
+                path: `blog`,
+                element: <BlogLayout />,
+                children: [
+                    {
+                        idex: true,
+                        element: <BlogPage />
+                    },
+                    {
+                        path: ':postId',
+                        element: <BlogPostDetailPage />
+                    },
+                ]
             },
-            {
-              path: 'blog/:postId', // id를 통해 블로그 상세 페이지를 조회하기, 안에 댓글, 좋아요 등 몇 개 파라미터를 사용할 지 모르기에 객체로 전달해준다.
-              element: <BlogPostDetailPage />
-            },
+            // {
+            //     path: 'blog',
+            //     element: <BlogPage />
+            // },
+            // {
+            //   path: 'blog/:postId', // id를 통해 블로그 상세 페이지를 조회하기, 안에 댓글, 좋아요 등 몇 개 파라미터를 사용할 지 모르기에 객체로 전달해준다.
+            //   element: <BlogPostDetailPage />
+            // },
             {
                 path: 'about',
                 element: <AboutPage />

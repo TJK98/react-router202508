@@ -1,17 +1,17 @@
 import styles from './BlogSideBar.module.scss';
-import {categories} from '../dummy-data/dummy-post.js';
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {categories, posts} from '../dummy-data/dummy-post.js';
+import {NavLink, useNavigate, useSearchParams} from "react-router-dom";
 
 const BlogSideBar = () => {
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams();
 
     // use~~가 붙은 건 훅이라고 부르는데 훅은 component 바로 아래에서만 호출해야 된다.
     // 새로 고침 없이 리다이랙션을 지원하는 훅
     const navigate = useNavigate();
 
-    // const handelCategoryClick = e => {
-    const handelCategoryClick = (category) => {
+    // const handleCategoryClick = e => {
+    const handleCategoryClick = (category) => {
         // 사이드바에 있는 카테고리를 누르면 목록으로 이동하면서 카테고리를 보여줘야 함.
         // location.href = `/blog`; // 새로 고침이 일어나서 쓰면 안 된다.
         // navigate(`/blog?categoty=${category}`); // location.href = `/blog`;와 같은 기능. 하지만 새로 고침이 일어나지 않는다.
@@ -22,6 +22,19 @@ const BlogSideBar = () => {
         });
     };
 
+    // 게시물별 카테고리 수 카운팅하는 함수
+    const getCategoryCount = (category) => {
+        if (category === 'all') {
+            return posts.length;
+        }
+        return posts.filter(post => post.category === category).length;
+    };
+
+    // 최근 글 3개를 가져오기
+    const recentPosts = [...posts]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 3);
+
     return (
         <aside className={styles.sidebar}>
             <h2>카테고리</h2>
@@ -29,14 +42,20 @@ const BlogSideBar = () => {
                 {categories.map((category) => (
                     <li key={category.id}>
                         <button
-                            className={`${styles.categoryButton}`}
+                            className={`
+                                ${styles.categoryButton}
+                                ${
+                                    (searchParams.get('category') || 'all') === category.id
+                                        ? styles.active : ''
+                                }
+                            `}
                             // onClick={handelCategoryClick}
-                            onClick={e => handelCategoryClick(category.id)} // 직접 함수를 재호출하면 파라미터를 넣을 수 있다.
+                            onClick={(e) => handleCategoryClick(category.id)} // 직접 함수를 재호출하면 파라미터를 넣을 수 있다.
                         >
                             {category.name}
                             <span className={styles.count}>
-                2
-              </span>
+                                {getCategoryCount(category.id)}
+                            </span>
                         </button>
                     </li>
                 ))}
@@ -45,7 +64,14 @@ const BlogSideBar = () => {
             <div className={styles.recentPosts}>
                 <h2>최근 글</h2>
                 <ul>
-
+                    {recentPosts.map((post) => (
+                        <li key={post.id}>
+                            <NavLink to={`/blog/${post.id}`}>
+                                {post.title}
+                                <span className={styles.recentPostDate}>{post.date}</span>
+                            </NavLink>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
@@ -61,6 +87,6 @@ const BlogSideBar = () => {
             </div>
         </aside>
     );
-}
+};
 
 export default BlogSideBar;

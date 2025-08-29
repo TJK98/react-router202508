@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
                 element: <BlogLayout />,
                 children: [
                     {
-                        idex: true,
+                        index: true,
                         element: <BlogPage />
                     },
                     {

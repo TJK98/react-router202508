@@ -4,7 +4,7 @@ import MainNav from "../components/MainNav.jsx";
 const AboutPage = () => {
     return (
         <>
-            <MainNav/>
+            {/*<MainNav/>*/}
             <h1>
                 About 페이지 입니다.
             </h1>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './BlogFilter.module.scss';
 import {categories} from "../dummy-data/dummy-post.js";
 import {useSearchParams} from "react-router-dom";
@@ -7,6 +7,9 @@ const BlogFilter = () => {
 
     // 쿼리 스트링 생성 기능
     const [searchParams, setSearchParams] = useSearchParams();
+
+    // 초기값을 URL 파라미터에서 가져오기
+    const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
 
     // 카테고리 옵션 선택 이벤트
     const handelCategotyChange = e => {
@@ -17,7 +20,7 @@ const BlogFilter = () => {
             prev.set(`category`, e.target.value);
             return prev;
         });
-    }
+    };
 
     const handleSortChange = e => {
         setSearchParams(prev => {
@@ -27,11 +30,25 @@ const BlogFilter = () => {
     };
 
     const handleSearch = e => {
-        setSearchParams(prev => {
-            prev.set('search', e.target.value);
-            return prev;
-        });
+        setSearchValue(e.target.value);
     };
+
+    // 디바운싱을 통한 검색어 처리
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setSearchParams(prev => {
+                if (searchValue.trim()) {
+                    prev.set('search', searchValue.trim());
+                } else {
+                    // 검색어가 비어있으면 search 파라미터 제거
+                    prev.delete('search');
+                }
+                return prev;
+            });
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchValue, setSearchParams]);
 
     return (
         <div className={styles.filter}>
@@ -49,15 +66,15 @@ const BlogFilter = () => {
                 onChange={handleSortChange}
                 value={searchParams.get('sort') || 'latest'}
             >
-                <option value='latest'>최신순</option>
-                <option value='oldest'>오래된순</option>
+                <option value="latest">최신순</option>
+                <option value="oldest">오래된순</option>
             </select>
 
             <input
-                type='text'
-                placeholder='검색어를 입력하세요'
+                type="text"
+                placeholder="검색어를 입력하세요"
                 onChange={handleSearch}
-                value={searchParams.get('search') || ''}
+                value={searchValue}
             />
         </div>
     );

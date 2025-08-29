@@ -5,6 +5,7 @@ import IndexPage from '../pages/IndexPage.jsx';
 import BlogPage from '../pages/BlogPage.jsx';
 import AboutPage from '../pages/AboutPage.jsx';
 import RootLayout from "../layouts/RootLayout.jsx";
+import ErrorPage from "../pages/ErrorPage.jsx";
 
 
 // 라우터 설정을  props로 전달
@@ -25,6 +26,8 @@ export const router = createBrowserRouter([
     {
         path: `/`,
         element: <RootLayout/>,
+        // custom erroer page 설정
+        errorElement: <ErrorPage/>,
         // children -> Layout의 Outlet 부분을 무엇으로 바꿀지 설정
         children: [
             {

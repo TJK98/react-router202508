@@ -4,6 +4,7 @@ import {posts} from "../dummy-data/dummy-post.js";
 import PostCard from "../components/PostCard.jsx";
 import {useSearchParams} from "react-router-dom";
 import BlogFilter from "../components/BlogFilter.jsx";
+import BlogSideBar from '../components/BlogSideBar.jsx';
 
 const BlogPage = () => {
 
@@ -39,6 +40,8 @@ const BlogPage = () => {
             <div className={styles.blog}>
 
                 <BlogFilter />
+
+                <BlogSideBar />
 
                 <div className={styles.grid}>
                     {posts
